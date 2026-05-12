@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <memory>
 
 #include "animation_handler.hpp"
 
@@ -46,6 +47,52 @@ public:
         this->regions[0] = 0;
     }
 
+    /* Manual Copy Constructor to handle unique_ptr */
+    Tile(const Tile& other) :
+        animHandler(other.animHandler),
+        tileType(other.tileType),
+        tileVariant(other.tileVariant),
+        cost(other.cost),
+        maxLevels(other.maxLevels),
+        population(other.population),
+        maxPopPerLevel(other.maxPopPerLevel),
+        production(other.production),
+        storedGoods(other.storedGoods)
+    {
+        this->regions[0] = other.regions[0];
+        // Create a NEW sprite for the copy rather than trying to copy the pointer
+        if (other.sprite) {
+            this->sprite = std::make_unique<sf::Sprite>(*other.sprite);
+        }
+        else {
+            this->sprite = nullptr;
+        }
+    }
+
+    /* Manual Copy Assignment Operator to handle unique_ptr */
+    Tile& operator=(const Tile& other) {
+        if (this == &other) return *this;
+
+        this->animHandler = other.animHandler;
+        this->tileType = other.tileType;
+        this->tileVariant = other.tileVariant;
+        this->cost = other.cost;
+        this->maxLevels = other.maxLevels;
+        this->population = other.population;
+        this->maxPopPerLevel = other.maxPopPerLevel;
+        this->production = other.production;
+        this->storedGoods = other.storedGoods;
+        this->regions[0] = other.regions[0];
+
+        if (other.sprite) {
+            this->sprite = std::make_unique<sf::Sprite>(*other.sprite);
+        }
+        else {
+            this->sprite = nullptr;
+        }
+        return *this;
+    }
+
     /* SFML 3.1 Updated Main Constructor */
     Tile(const unsigned int tileSize, const unsigned int height, sf::Texture& texture,
         const std::vector<Animation>& animations,
@@ -77,6 +124,11 @@ public:
             this->animHandler.addAnim(animation);
         }
         this->animHandler.update(0.0f);
+    }
+
+    std::string getCost()
+    {
+        return std::to_string(this->cost);
     }
 };
 

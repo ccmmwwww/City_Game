@@ -3,11 +3,13 @@
 
 #include <stack>
 #include <SFML/Graphics.hpp>
-#include "texture_manager.hpp"
 #include <memory>
 #include <map>
 #include <string>
+
+#include "texture_manager.hpp"
 #include "tile.hpp"
+#include "gui.hpp"
 
 class GameState;
 
@@ -19,6 +21,8 @@ private:
     TextureManager texmgr;
     void loadTextures();
     void loadTiles();
+    void loadStylesheets();
+    void loadFonts();
 
 public:
 
@@ -31,6 +35,8 @@ public:
     sf::Sprite background;
 
     std::map<std::string, Tile> tileAtlas;
+    std::map<std::string, sf::Font> fonts;
+    std::map<std::string, GuiStyle> stylesheets;
 
     void pushState(std::unique_ptr<GameState> state);
     void popState();

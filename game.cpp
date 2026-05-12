@@ -112,6 +112,27 @@ void Game::loadTiles()
     return;
 }
 
+void Game::loadFonts()
+{
+    sf::Font font;
+    font.openFromFile("font.ttf");
+    this->fonts["main_font"] = font;
+
+    return;
+}
+
+void Game::loadStylesheets()
+{
+    this->stylesheets["button"] = GuiStyle(&this->fonts.at("main_font"), 1,
+        sf::Color(0xc6, 0xc6, 0xc6), sf::Color(0x94, 0x94, 0x94), sf::Color(0x00, 0x00, 0x00),
+        sf::Color(0x61, 0x61, 0x61), sf::Color(0x94, 0x94, 0x94), sf::Color(0x00, 0x00, 0x00));
+    this->stylesheets["text"] = GuiStyle(&this->fonts.at("main_font"), 0,
+        sf::Color(0x00, 0x00, 0x00, 0x00), sf::Color(0x00, 0x00, 0x00), sf::Color(0xff, 0xff, 0xff),
+        sf::Color(0x00, 0x00, 0x00, 0x00), sf::Color(0x00, 0x00, 0x00), sf::Color(0xff, 0x00, 0x00));
+
+    return;
+}
+
 Game::Game() : background(TextureManager::getNullTexture())
 {
     // 1. Create Window
@@ -121,6 +142,8 @@ Game::Game() : background(TextureManager::getNullTexture())
     // 2. Load Textures
     this->loadTextures();
     this->loadTiles();
+    this->loadFonts();
+    this->loadStylesheets();
 
     // 3. Link Texture
     sf::Texture& bgTex = this->texmgr.getRef("background");
